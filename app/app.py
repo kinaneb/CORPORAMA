@@ -18,7 +18,7 @@ def main():
         sys.exit(1)
     file_path = sys.argv[1]
     sirens = analyze(file_path)
-    print(sirens)
+    print (f'There are ({sirens[0]}) unique SIRENs that present once\nand ({sirens[1]}) SIRENs that are present at least twice\nin the file {file_path}')
 
 if __name__ == '__main__':
     main()
