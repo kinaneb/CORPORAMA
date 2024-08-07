@@ -7,7 +7,7 @@ def analyze(file_path):
             sirens = file.read().splitlines()
             sirens_occurrences = Counter(sirens)
             unique = sum([1 for occurrences in sirens_occurrences.values() if occurrences == 1])
-            other = len(sirens) - unique
+            other = len(sirens_occurrences) - unique
         return unique, other
     except Exception as e:
         return str(e), None
