@@ -4,20 +4,15 @@ def analyze(file_path):
     try:
         with open(file_path, 'r') as file:
             sirens = file.read().splitlines()
-            sirens.sort()
-            previous = ""
-            next = ""
-            unique = []
-            other = []
-            for i in range(1, len(sirens)-1):
-                previous = sirens[i-1]
-                current = sirens[i]
-                next = sirens[i+1]
-                if current != previous and current != next:
-                    unique.append(current)
+            sirens_occurrences = {}
+            for siren in sirens:
+                if siren in sirens_occurrences:
+                    sirens_occurrences[siren] += 1
                 else:
-                    other.append(current)
-        return len(unique), len(other)
+                    sirens_occurrences[siren] = 1
+            unique = sum([1 for siren, occurrences in sirens_occurrences.items() if occurrences == 1])
+            other = len(sirens) - unique
+        return unique, other
     except Exception as e:
         return str(e), None
     
