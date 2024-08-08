@@ -1,7 +1,90 @@
 <html>
   <head><title>Test SIREN</title></head>
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-  <script src="analyzer.js"></script>
+  <script>
+    $(document).ready(function() {
+    function analyze() {
+        var sirens_occurrences = {};
+        var siren_li_elements = {};
+        var sirens_occurrences_counter = 0;
+
+        $('li').each(function() {
+            var siren = $(this).text().trim();
+            if (siren.length === 0) {
+                return;
+            }
+            if(sirens_occurrences[siren]) {
+                siren_li_elements[siren].push(this);
+                sirens_occurrences[siren]++;
+            }
+            else {
+                siren_li_elements[siren] = [this];
+                sirens_occurrences_counter++;
+                sirens_occurrences[siren] = 1;
+            }
+        });
+        var unique_siren_counter = 0;
+        $.each(sirens_occurrences, function(siren, occurrence) {
+            var elements = siren_li_elements[siren];
+            if (occurrence === 1) {
+                unique_siren_counter++;
+                $(elements).addClass('unique');
+            } else {
+                $(elements).addClass('other');
+            }
+        });
+        console.log('Unique sirens:', unique_siren_counter);
+        console.log('Non unique sirens:', sirens_occurrences_counter - unique_siren_counter);
+    }
+    analyze();
+});
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    ul{
+      
+      /* display: flex;
+      flex-wrap: wrap;
+      flex-direction: row; */
+      display: grid;
+
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+    }
+    .other {
+      /* flex: 0 0 50%; */
+      box-sizing: border-box;
+      color: #00C5CF;
+      /* width: 50%; */
+      order: 1;
+      /* grid-column: 1; */
+      padding: 5px;
+      margin: 5px;
+      border-radius: 30px;;
+      text-align: center;
+      font-weight: bold;
+      background-color: #1E73BE;
+    }
+    .unique {
+      grid-auto-flow: row;
+      /* flex: 0 0 50%; */
+      box-sizing: border-box;
+      color: #1E73BE;
+      /* width: 50%; */
+      order: 2;
+      /* grid-column: 2; */
+      padding: 5px;
+      margin: 5px;
+      border-radius: 30px;
+      text-align: center;
+      font-weight: bold;
+      background-color: #00C5CF;
+    }
+  </style>
   <body>
     <ul>
       <li>000325175</li>
