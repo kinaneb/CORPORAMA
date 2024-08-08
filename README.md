@@ -15,6 +15,9 @@ docker compose build
 ```bash
 docker compose run analyzer <the-command-from-the-entrypoint>
 ```
+> docker compose run analyzer test: to run the unit tests
+> docker compose run analyzer bash: to access to the interactive terminal
+> docker compose run analyzer sirens_fxt.txt: to run the app on with the sirens_fxt.txt file as input 
 
 2. Remove the container:
 
