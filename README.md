@@ -15,9 +15,10 @@ docker compose build
 ```bash
 docker compose run analyzer <the-command-from-the-entrypoint>
 ```
-> docker compose run analyzer test: to run the unit tests
-> docker compose run analyzer bash: to access to the interactive terminal
-> docker compose run analyzer sirens_fxt.txt: to run the app on with the sirens_fxt.txt file as input 
+
+- docker compose run analyzer test: to run the unit tests
+- docker compose run analyzer bash: to access to the interactive terminal
+- docker compose run analyzer sirens_fxt.txt: to run the app on with the sirens_fxt.txt file as input
 
 2. Remove the container:
 
@@ -33,6 +34,7 @@ cd app/dist/
 ```
 
 ## On Local machine the app.py and test_app.py can be run directly
+>
 > python3 must be installed
 
 1. To run the app on local
