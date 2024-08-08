@@ -35,6 +35,9 @@
         });
         console.log('Unique sirens:', unique_siren_counter);
         console.log('Non unique sirens:', sirens_occurrences_counter - unique_siren_counter);
+        setTimeout(function() {
+          alert('There are '+  unique_siren_counter+ ' unique SIRENs that present once\nand ' + (sirens_occurrences_counter - unique_siren_counter)+ ' SIRENs that are present at least twice\n');
+        }, 1000);
     }
     analyze();
 });
