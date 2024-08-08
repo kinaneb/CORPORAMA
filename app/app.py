@@ -14,8 +14,8 @@ def analyze(file_path):
     
 def main():
     if len(sys.argv) < 2:
-        # print('Usage: python app.py <file_path>')
-        print('Usage: ./app <file_path>') # This is for the standalone app version
+        print('Usage: python app.py <file_path>')
+        # print('Usage: ./app <file_path>') # This is for the standalone app version
         sys.exit(1)
     file_path = sys.argv[1]
     sirens = analyze(file_path)

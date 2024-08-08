@@ -16,7 +16,7 @@ docker compose build
 docker compose run analyzer <the-command-from-the-entrypoint>
 ```
 
-2. Remove the container
+2. Remove the container:
 
 ```bash
 docker compose down --remove-orphans
