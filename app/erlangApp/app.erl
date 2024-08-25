@@ -1,7 +1,6 @@
 -module(app).
 -export([readlines/1]).
--import(maps, [get/3, put/3]).
--import(io, [format/2]).
+-import(validator, [is_valid/1]).
 
 analyze(SiernsList) ->
 	analyze(SiernsList, _OccurrencesMap=#{}, _UniqueCounter=0, _OtherCounter=0).
@@ -11,24 +10,33 @@ analyze([], _OccurrencesMap, UniqueCounter, OtherCounter) ->
 	{UniqueCounter, OtherCounter};
 
 analyze([Siren | SiernsList], OccurrencesMap, UniqueCounter, OtherCounter) ->
-	Counter = get(Siren, OccurrencesMap, 0),
-	{UpdatedOccurrencesMap, UpdatedUniqueCounter, UpdatedOtherCounter} = update_occurences(Siren, Counter, OccurrencesMap, UniqueCounter, OtherCounter),
+	ValidatedSiren = is_valid(binary:bin_to_list(Siren)),
+	Counter = maps:get(ValidatedSiren, OccurrencesMap, 0),
+	{UpdatedOccurrencesMap, UpdatedUniqueCounter, UpdatedOtherCounter} = update_occurences(ValidatedSiren, Counter, OccurrencesMap, UniqueCounter, OtherCounter),
 	analyze(SiernsList, UpdatedOccurrencesMap, UpdatedUniqueCounter, UpdatedOtherCounter).
 
+update_occurences("0", 0, OccurrencesMap, UniqueCounter, OtherCounter) ->
+	{OccurrencesMap, UniqueCounter, OtherCounter};
+
 update_occurences(Siren, 0, OccurrencesMap, UniqueCounter, OtherCounter) ->
-	{put(Siren, 1, OccurrencesMap), UniqueCounter + 1, OtherCounter};
+	{maps:put(Siren, 1, OccurrencesMap), UniqueCounter + 1, OtherCounter};
 
 update_occurences(Siren, 1, OccurrencesMap, UniqueCounter, OtherCounter) ->
-        {put(Siren, 2, OccurrencesMap), UniqueCounter - 1, OtherCounter + 1};
+        {maps:put(Siren, 2, OccurrencesMap), UniqueCounter - 1, OtherCounter + 1};
 
 update_occurences(Siren, N, OccurrencesMap, UniqueCounter, OtherCounter) ->
-        {put(Siren, N + 1, OccurrencesMap), UniqueCounter, OtherCounter}.
+        {maps:put(Siren, N + 1, OccurrencesMap), UniqueCounter, OtherCounter}.
 
 display_results({UniqueCounter, OtherCounter}) ->
-	format("There are (~p) unique SIRENs that present once~n", [UniqueCounter]),
-	format("and (~p) SIRENs that are present at least twice", [OtherCounter]).	
+	io:format("There are (~p) unique SIRENs that present once~n", [UniqueCounter]),
+	io:format("and (~p) SIRENs that are present at least twice~n", [OtherCounter]).	
 
 readlines(FileName) ->
-	{ok, Data} = file:read_file(FileName),
+	{Status, Data} = file:read_file(FileName),
+	analyze_data({Status, Data}).
+
+analyze_data({ok, Data}) ->
 	{UniqueCounter, OtherCounter} = analyze(binary:split(Data, [<<"\n">>], [global])),
-	display_results({UniqueCounter, OtherCounter}).
+	display_results({UniqueCounter, OtherCounter});
+analyze_data({error, Reason}) ->
+	io:format("Read file faild. Reason: (~p) ~n", [Reason]).
